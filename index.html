@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+* {padding: 0; margin: 0;}
+body {background-color: #aaa; font-size: 4em;}
+p {font-size: 1.2em;}
+</style>
+<script src='./jquery.js'></script>
+<script src='./circularslide.js'></script>
+</head>
+<body>
+<div class='slider'>
+    <div style='background-color: white'>
+        <p>Click me.</p>
+        The quick brown fox jump over a lazy dog.
+    </div>
+    <div style='color: red; background-color: #ccc'>
+        <p>I'm the 2nd layer.</p>
+        The quick brown fox jump over a lazy dog.
+    </div>
+    <div style='color: white; background-color: navy'>
+        <p>I'm the last layer.</p>
+        The quick brown fox jump over a lazy dog.
+    </div>
+</div>
+<script>
+var currentIndex = 0;
+$('.slider').circularslide({width: 960, height: 480}).click(function(e) {
+    $('.slider')[0].slideTo(++currentIndex % 3, null, e.clientX, e.clientY);
+});
+</script>
