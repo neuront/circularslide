@@ -4,8 +4,10 @@
         var tick = opt.tick || 20;
         var width = opt.width || 800;
         var height = opt.height || 600;
+        var step = opt.step || 12;
         var borderSize = opt.borderSize || 0;
         var borderColor = opt.borderColor || 'transparent';
+
         return this.each(function() {
             var me = $(this);
             if (me.children().length < 2) {
@@ -18,6 +20,7 @@
                 overflow: 'hidden'
             });
             var frames = [];
+
             me.children().each(function() {
                 var child = $(this);
                 child.detach();
@@ -41,6 +44,7 @@
                     position: 'relative'
                 });
             });
+
             me.append(slider);
             frames[0].children().css({
                 height: height,
@@ -52,6 +56,7 @@
                 if (fr.lock) {
                     return cb(false);
                 }
+
                 fr.lock = true;
                 cx = cx || Math.random() * width;
                 cy = cy || Math.random() * height;
@@ -59,12 +64,17 @@
                 var el = cr.children();
                 fr.detach();
                 slider.append(fr);
-                var radius = 0, maxRadius = 2 * Math.max(width, height);
+                var radius = 0;
+                var maxRadius = Math.max(distance(0, 0, cx, cy),
+                                         distance(0, height, cx, cy),
+                                         distance(width, 0, cx, cy),
+                                         distance(width, height, cx, cy));
+
                 var dx = cx - radius, dy = cy - radius;
                 cr.css({'border-radius': '50%'});
                 function nextFrame() {
                     if (radius < maxRadius) {
-                        radius += 12;
+                        radius += step;
                         dx = cx - radius;
                         dy = cy - radius;
                         cr.css({
@@ -97,4 +107,8 @@
             };
         });
     };
+
+    function distance(x0, y0, x1, y1) {
+        return Math.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1));
+    }
 }(jQuery);

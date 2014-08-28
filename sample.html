@@ -27,7 +27,12 @@ p {font-size: 1.2em;}
 </div>
 <script>
 var currentIndex = 0;
-$('.slider').circularslide({width: 960, height: 480}).click(function(e) {
+$('.slider').circularslide({
+    width: 960,
+    height: 480,
+    tick: 40,
+    step: 32
+}).click(function(e) {
     $('.slider')[0].slideTo(++currentIndex % 3, null, e.clientX, e.clientY);
 });
 </script>
