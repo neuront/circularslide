@@ -7,6 +7,7 @@
         var step = opt.step || 12;
         var borderSize = opt.borderSize || 0;
         var borderColor = opt.borderColor || 'transparent';
+        var currentIndex = opt.index || 0;
 
         return this.each(function() {
             var me = $(this);
@@ -33,7 +34,7 @@
                     height: 0,
                     width: 0,
                     'border-size': borderSize,
-                    'border-color': borderColor,
+                    'border-color': 'transparent',
                     'border-style': 'solid',
                     overflow: 'hidden',
                     position: 'relative'
@@ -50,9 +51,28 @@
                 height: height,
                 width: width
             });
+
+            var fr = frames[currentIndex];
+            fr.detach();
+            slider.append(fr);
+
+            fr.children().css({
+                height: height,
+                width: width,
+                left: 0,
+                top: 0,
+                'border-color': 'transparent',
+                'border-radius': 0
+            });
+
             this.slideTo = function(elementIndex, cb, cx, cy) {
-                var fr = frames[elementIndex];
                 cb = cb || function() {};
+                if (elementIndex === currentIndex) {
+                    return cb(false);
+                }
+                currentIndex = elementIndex;
+
+                var fr = frames[elementIndex];
                 if (fr.lock) {
                     return cb(false);
                 }
@@ -71,7 +91,10 @@
                                          distance(width, height, cx, cy));
 
                 var dx = cx - radius, dy = cy - radius;
-                cr.css({'border-radius': '50%'});
+                cr.css({
+                    'border-color': borderColor,
+                    'border-radius': '50%'
+                });
                 function nextFrame() {
                     if (radius < maxRadius) {
                         radius += step;
@@ -94,6 +117,7 @@
                         width: width,
                         left: 0,
                         top: 0,
+                        'border-color': 'transparent',
                         'border-radius': 0
                     });
                     el.css({
